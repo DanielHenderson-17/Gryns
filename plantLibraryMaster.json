@@ -1,0 +1,435 @@
+{
+  "_schema": [
+    "name",
+    "species",
+    "description",
+    "img",
+    "icon_img",
+    "harvest",
+    "yield",
+    "germination",
+    "hardinessZone"
+  ],
+  "plants": [
+    {
+      "name": "basil",
+      "species": "Ocimum basilicum",
+      "description": "A fragrant, tender herb famous for its role in Italian cuisine and pesto. It grows in lush, green bushy mounds.",
+      "img": null,
+      "icon_img": "basil.webp",
+      "harvest": { "duration": { "max": 12, "min": 10, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "135g (4.8 oz)" },
+      "germination": {
+        "duration": { "max": 21, "min": 14, "unit": "days" },
+        "rate": 0.6
+      },
+      "hardinessZone": { "max": 11, "min": 9 }
+    },
+    {
+      "name": "bell pepper",
+      "species": "Capsicum annuum",
+      "description": "A sweet, crunchy vegetable that grows on sturdy, upright plants. Fruits change from green to vibrant red, yellow, or orange.",
+      "img": null,
+      "icon_img": "bellpepper.webp",
+      "harvest": { "duration": { "max": 17, "min": 17, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "240g (8.5 oz)" },
+      "germination": {
+        "duration": { "max": 28, "min": 8, "unit": "days" },
+        "rate": 0.55
+      },
+      "hardinessZone": { "max": 11, "min": 1 }
+    },
+    {
+      "name": "parsley",
+      "species": "Petroselinum crispum",
+      "description": "A versatile biennial herb with bright green, ruffled or flat leaves used as a fresh garnish or flavoring.",
+      "img": null,
+      "icon_img": "parsley.webp",
+      "harvest": { "duration": { "max": 26, "min": 17, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "1.5kg (3.3 lbs)" },
+      "germination": {
+        "duration": { "max": 21, "min": 8, "unit": "days" },
+        "rate": 0.6
+      },
+      "hardinessZone": { "max": 9, "min": 6 }
+    },
+    {
+      "name": "spinach",
+      "species": "Spinacia oleracea",
+      "description": "A nutrient-rich leafy green that thrives in cool water. Excellent for salads, smoothies, and sautéing.",
+      "img": null,
+      "icon_img": "spinach.webp",
+      "harvest": { "duration": { "max": 8, "min": 6, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "100g (3.5 oz)" },
+      "germination": {
+        "duration": { "max": 7, "min": 1, "unit": "days" },
+        "rate": 0.6
+      },
+      "hardinessZone": { "max": 10, "min": 8 }
+    },
+    {
+      "name": "tomato",
+      "species": "Solanum lycopersicum",
+      "description": "High-yielding plants producing juicy, red fruits. Requires a bit of support as it grows tall and heavy.",
+      "img": null,
+      "icon_img": "tomato.webp",
+      "harvest": { "duration": { "max": 14, "min": 10, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "340g (12 oz)" },
+      "germination": {
+        "duration": { "max": 7, "min": 1, "unit": "days" },
+        "rate": 0.75
+      },
+      "hardinessZone": { "max": 10, "min": 2 }
+    },
+    {
+      "name": "romaine lettuce",
+      "species": "Lactuca sativa L. var. longifolia",
+      "description": "A sturdy lettuce forming tall, upright heads with crisp, crunchy ribs and dark green outer leaves.",
+      "img": null,
+      "icon_img": "romainelettuce.webp",
+      "harvest": { "duration": { "max": 11, "min": 10, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "210g (7.5 oz)" },
+      "germination": {
+        "duration": { "max": 10, "min": 7, "unit": "days" },
+        "rate": 0.85
+      },
+      "hardinessZone": { "max": 11, "min": 2 }
+    },
+    {
+      "name": "dill",
+      "species": "Anethum graveolens",
+      "description": "An aromatic herb with feathery, fern-like blue-green leaves. Essential for pickling and seasoning fish.",
+      "img": null,
+      "icon_img": "dill.webp",
+      "harvest": { "duration": { "max": 12, "min": 10, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "42g (1.5 oz)" },
+      "germination": {
+        "duration": { "max": 21, "min": 10, "unit": "days" },
+        "rate": 0.7
+      },
+      "hardinessZone": { "max": 11, "min": 2 }
+    },
+    {
+      "name": "green onion",
+      "species": "Allium fistulosum",
+      "description": "Also known as scallions; these are harvested for their succulent, hollow green stalks and mild white bases.",
+      "img": null,
+      "icon_img": "greenonion.webp",
+      "harvest": { "duration": { "max": 10, "min": 8, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "175g (6.2 oz)" },
+      "germination": {
+        "duration": { "max": 14, "min": 7, "unit": "days" },
+        "rate": 0.75
+      },
+      "hardinessZone": { "max": 10, "min": 6 }
+    },
+    {
+      "name": "cherry tomato",
+      "species": "Solanum lycopersicum var. cerasiforme",
+      "description": "Bite-sized, sweet tomatoes that grow in prolific clusters. Perfect for snacking and salads.",
+      "img": null,
+      "icon_img": "cherrytomato.webp",
+      "harvest": { "duration": { "max": 12, "min": 10, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "350g (12.3 oz)" },
+      "germination": {
+        "duration": { "max": 10, "min": 5, "unit": "days" },
+        "rate": 0.8
+      },
+      "hardinessZone": { "max": 11, "min": 3 }
+    },
+    {
+      "name": "chives",
+      "species": "Allium schoenoprasum",
+      "description": "A hardy perennial with thin, grass-like leaves and a mild onion flavor. Produces beautiful edible purple flowers.",
+      "img": null,
+      "icon_img": "chives.webp",
+      "harvest": { "duration": { "max": 12, "min": 10, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "32g (1.1 oz)" },
+      "germination": {
+        "duration": { "max": 21, "min": 14, "unit": "days" },
+        "rate": 0.65
+      },
+      "hardinessZone": { "max": 9, "min": 3 }
+    },
+    {
+      "name": "cilantro",
+      "species": "Coriandrum sativum",
+      "description": "A fast-growing annual herb used widely in salsa and curry. Leaves are citrusy and pungent.",
+      "img": null,
+      "icon_img": "cilantro.webp",
+      "harvest": { "duration": { "max": 8, "min": 4, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "77g (2.7 oz)" },
+      "germination": {
+        "duration": { "max": 14, "min": 7, "unit": "days" },
+        "rate": 0.6
+      },
+      "hardinessZone": { "max": 11, "min": 2 }
+    },
+    {
+      "name": "jalapeno",
+      "species": "Capsicum annuum 'Jalapeño'",
+      "description": "A medium-sized chili pepper known for its mild to moderate heat. Dark green pods that ripen to a deep red.",
+      "img": null,
+      "icon_img": "jalapeno.webp",
+      "harvest": { "duration": { "max": 14, "min": 10, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "210g (7.4 oz)" },
+      "germination": {
+        "duration": { "max": 21, "min": 7, "unit": "days" },
+        "rate": 0.7
+      },
+      "hardinessZone": { "max": 11, "min": 9 }
+    },
+    {
+      "name": "lettuce",
+      "species": "Lactuca sativa",
+      "description": "Standard soft-leaf lettuce, perfect for fresh garden salads. Grows quickly and comes in many colors.",
+      "img": null,
+      "icon_img": "lettuce.webp",
+      "harvest": { "duration": { "max": 8, "min": 6, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "175g (6.2 oz)" },
+      "germination": {
+        "duration": { "max": 10, "min": 7, "unit": "days" },
+        "rate": 0.85
+      },
+      "hardinessZone": { "max": 11, "min": 2 }
+    },
+    {
+      "name": "strawberry",
+      "species": "Fragaria × ananassa",
+      "description": "A favorite for towers; everbearing varieties produce sweet red berries throughout the warm season.",
+      "img": null,
+      "icon_img": "strawberry.webp",
+      "harvest": { "duration": { "max": 14, "min": 10, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "105g (3.7 oz)" },
+      "germination": {
+        "duration": { "max": 28, "min": 14, "unit": "days" },
+        "rate": 0.5
+      },
+      "hardinessZone": { "max": 10, "min": 3 }
+    },
+    {
+      "name": "kale",
+      "species": "Brassica oleracea var. sabellica",
+      "description": "A nutrient-dense superfood with ruffled, hardy leaves. Becomes sweeter when grown in cooler temperatures.",
+      "img": null,
+      "icon_img": "kale.webp",
+      "harvest": { "duration": { "max": 10, "min": 8, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "140g (4.9 oz)" },
+      "germination": {
+        "duration": { "max": 10, "min": 5, "unit": "days" },
+        "rate": 0.8
+      },
+      "hardinessZone": { "max": 10, "min": 7 }
+    },
+    {
+      "name": "bok choy",
+      "species": "Brassica rapa subsp. chinensis",
+      "description": "Chinese cabbage with thick, crunchy white stalks and tender green leaves. Popular in stir-fries.",
+      "img": null,
+      "icon_img": "bokchoy.webp",
+      "harvest": { "duration": { "max": 7, "min": 5, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "245g (8.6 oz)" },
+      "germination": {
+        "duration": { "max": 10, "min": 4, "unit": "days" },
+        "rate": 0.85
+      },
+      "hardinessZone": { "max": 11, "min": 4 }
+    },
+    {
+      "name": "swiss chard",
+      "species": "Beta vulgaris subsp. vulgaris",
+      "description": "An ornamental and edible green with large, glossy leaves and stems that come in a rainbow of colors.",
+      "img": null,
+      "icon_img": "swisschard.webp",
+      "harvest": { "duration": { "max": 10, "min": 8, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "196g (6.9 oz)" },
+      "germination": {
+        "duration": { "max": 14, "min": 7, "unit": "days" },
+        "rate": 0.75
+      },
+      "hardinessZone": { "max": 10, "min": 6 }
+    },
+    {
+      "name": "mint",
+      "species": "Mentha",
+      "description": "Highly aromatic and fast-growing herb. Its refreshing leaves are perfect for teas and cocktails.",
+      "img": null,
+      "icon_img": "mint.webp",
+      "harvest": { "duration": { "max": 12, "min": 8, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "56g (2 oz)" },
+      "germination": {
+        "duration": { "max": 15, "min": 10, "unit": "days" },
+        "rate": 0.5
+      },
+      "hardinessZone": { "max": 9, "min": 3 }
+    },
+    {
+      "name": "oregano",
+      "species": "Origanum vulgare",
+      "description": "A woody perennial with a sprawling habit. Intensely flavored leaves are a staple of Mediterranean cooking.",
+      "img": null,
+      "icon_img": "oregano.webp",
+      "harvest": { "duration": { "max": 14, "min": 10, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "35g (1.2 oz)" },
+      "germination": {
+        "duration": { "max": 14, "min": 7, "unit": "days" },
+        "rate": 0.6
+      },
+      "hardinessZone": { "max": 10, "min": 4 }
+    },
+    {
+      "name": "sage",
+      "species": "Salvia officinalis",
+      "description": "A savory herb with velvet-textured, grayish-green leaves. Adds a warm, earthy depth to many dishes.",
+      "img": null,
+      "icon_img": "sage.webp",
+      "harvest": { "duration": { "max": 15, "min": 12, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "28g (1 oz)" },
+      "germination": {
+        "duration": { "max": 21, "min": 10, "unit": "days" },
+        "rate": 0.55
+      },
+      "hardinessZone": { "max": 8, "min": 4 }
+    },
+    {
+      "name": "thyme",
+      "species": "Thymus vulgaris",
+      "description": "A low-growing, tiny-leaved herb with a powerful, woodsy aroma. Extremely durable and easy to grow.",
+      "img": null,
+      "icon_img": "thyme.webp",
+      "harvest": { "duration": { "max": 16, "min": 12, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "28g (1 oz)" },
+      "germination": {
+        "duration": { "max": 28, "min": 14, "unit": "days" },
+        "rate": 0.5
+      },
+      "hardinessZone": { "max": 9, "min": 5 }
+    },
+    {
+      "name": "arugula",
+      "species": "Eruca vesicaria",
+      "description": "A fast-growing, peppery green also known as rocket. Adds a spicy bite to salads and pizzas.",
+      "img": null,
+      "icon_img": "arugula.webp",
+      "harvest": { "duration": { "max": 5, "min": 3, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "105g (3.7 oz)" },
+      "germination": {
+        "duration": { "max": 7, "min": 3, "unit": "days" },
+        "rate": 0.9
+      },
+      "hardinessZone": { "max": 11, "min": 3 }
+    },
+    {
+      "name": "mustard greens",
+      "species": "Brassica juncea",
+      "description": "Spicy, bold-flavored leaves that bring a wasabi-like kick to salads and southern-style dishes.",
+      "img": null,
+      "icon_img": "mustardgreens.webp",
+      "harvest": { "duration": { "max": 6, "min": 4, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "154g (5.4 oz)" },
+      "germination": {
+        "duration": { "max": 10, "min": 4, "unit": "days" },
+        "rate": 0.85
+      },
+      "hardinessZone": { "max": 11, "min": 6 }
+    },
+    {
+      "name": "watercress",
+      "species": "Nasturtium officinale",
+      "description": "An aquatic plant that thrives in flowing water. Known for its small, round leaves and peppery flavor.",
+      "img": null,
+      "icon_img": "watercress.webp",
+      "harvest": { "duration": { "max": 7, "min": 4, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "210g (7.4 oz)" },
+      "germination": {
+        "duration": { "max": 14, "min": 7, "unit": "days" },
+        "rate": 0.7
+      },
+      "hardinessZone": { "max": 11, "min": 3 }
+    },
+    {
+      "name": "stevia",
+      "species": "Stevia rebaudiana",
+      "description": "A natural sweetener plant. The leaves are incredibly sweet and can be used as a zero-calorie sugar substitute.",
+      "img": null,
+      "icon_img": "stevia.webp",
+      "harvest": { "duration": { "max": 14, "min": 10, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "42g (1.5 oz)" },
+      "germination": {
+        "duration": { "max": 21, "min": 10, "unit": "days" },
+        "rate": 0.45
+      },
+      "hardinessZone": { "max": 11, "min": 9 }
+    },
+    {
+      "name": "lavender",
+      "species": "Lavandula",
+      "description": "A famously fragrant herb with silvery foliage and purple flower spikes. Used for tea, oils, and scenting.",
+      "img": null,
+      "icon_img": "lavender.webp",
+      "harvest": { "duration": { "max": 24, "min": 12, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "21g (0.7 oz)" },
+      "germination": {
+        "duration": { "max": 28, "min": 14, "unit": "days" },
+        "rate": 0.4
+      },
+      "hardinessZone": { "max": 9, "min": 5 }
+    },
+    {
+      "name": "calendula",
+      "species": "Calendula officinalis",
+      "description": "Bright yellow-orange edible flowers. Petals add a saffron-like color to dishes and have medicinal properties.",
+      "img": null,
+      "icon_img": "calendula.webp",
+      "harvest": { "duration": { "max": 12, "min": 8, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "35g (1.2 oz)" },
+      "germination": {
+        "duration": { "max": 14, "min": 7, "unit": "days" },
+        "rate": 0.7
+      },
+      "hardinessZone": { "max": 11, "min": 2 }
+    },
+    {
+      "name": "nasturtium",
+      "species": "Tropaeolum",
+      "description": "Cheery, fast-growing plants with shield-shaped leaves and bright edible flowers with a peppery bite.",
+      "img": null,
+      "icon_img": "nasturtium.webp",
+      "harvest": { "duration": { "max": 10, "min": 6, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "49g (1.7 oz)" },
+      "germination": {
+        "duration": { "max": 12, "min": 7, "unit": "days" },
+        "rate": 0.8
+      },
+      "hardinessZone": { "max": 11, "min": 2 }
+    },
+    {
+      "name": "bush beans",
+      "species": "Phaseolus vulgaris",
+      "description": "Compact bean plants that stand upright. They produce tender green pods without the need for a trellis.",
+      "img": null,
+      "icon_img": "bushbeans.webp",
+      "harvest": { "duration": { "max": 9, "min": 7, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "84g (3 oz)" },
+      "germination": {
+        "duration": { "max": 10, "min": 7, "unit": "days" },
+        "rate": 0.85
+      },
+      "hardinessZone": { "max": 11, "min": 3 }
+    },
+    {
+      "name": "cucumber",
+      "species": "Cucumis sativus",
+      "description": "Fast-growing vines that produce crisp, refreshing fruits. Best harvested when small and tender.",
+      "img": null,
+      "icon_img": "cucumber.webp",
+      "harvest": { "duration": { "max": 10, "min": 8, "unit": "week" } },
+      "yield": { "unit": "per slot", "label": "280g (9.9 oz)" },
+      "germination": {
+        "duration": { "max": 10, "min": 3, "unit": "days" },
+        "rate": 0.8
+      },
+      "hardinessZone": { "max": 11, "min": 4 }
+    }
+  ]
+}
