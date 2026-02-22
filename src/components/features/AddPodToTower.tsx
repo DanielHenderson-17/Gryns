@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Camera } from 'lucide-react'
+import { ArrowLeft, Camera, Nfc } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { PhotoPickerModal } from '@/components/ui/PhotoPickerModal'
@@ -8,6 +8,7 @@ import { Select } from '@/components/ui/Select'
 import { PlantSelect } from '@/components/ui/PlantSelect'
 import { PLANT_LIBRARY } from '@/data/plants'
 import { useTowerContext } from '@/context/TowerContext'
+import { scanNfcTag, isNfcSupported, NfcScanError } from '@/utils/nfc'
 
 export function AddPodToTower() {
   const { towerId } = useParams<{ towerId: string }>()
@@ -24,6 +25,9 @@ export function AddPodToTower() {
   const [photoDataUrl, setPhotoDataUrl] = useState<string | null>(null)
   const [photoModalOpen, setPhotoModalOpen] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [nfcPodId, setNfcPodId] = useState<string | null>(null)
+  const [nfcScanning, setNfcScanning] = useState(false)
+  const [nfcError, setNfcError] = useState<string | null>(null)
 
   if (!tower) {
     return (
@@ -63,12 +67,27 @@ export function AddPodToTower() {
     }
   }, [tower?.id, defaultSlot, slotNumber, availableSlots])
 
+  const handleScanTag = async () => {
+    setNfcError(null)
+    setNfcScanning(true)
+    try {
+      const serial = await scanNfcTag()
+      setNfcPodId(serial)
+    } catch (err) {
+      const msg = err instanceof NfcScanError ? err.message : 'Scan failed.'
+      setNfcError(msg)
+    } finally {
+      setNfcScanning(false)
+    }
+  }
+
   const handleSave = async () => {
     const chosenSlot = slotNumberValid ? slotNumber : defaultSlot
     if (!plantId || !plantName.trim() || chosenSlot == null) return
     setSaving(true)
     try {
       await addPod({
+        ...(nfcPodId && { id: nfcPodId }),
         towerId: tower.id,
         plantId,
         plantName: plantName.trim(),
@@ -165,6 +184,42 @@ export function AddPodToTower() {
             title="Pod photo"
           />
         </div>
+
+        {isNfcSupported() && (
+          <div>
+            <label className="mb-1 block text-sm font-medium text-slate-400">Link NFC tag (optional)</label>
+            <p className="mb-2 text-xs text-slate-500">
+              Scan a tag to use its ID for this pod. Later, scanning that tag from the nav will open this pod.
+            </p>
+            {nfcPodId ? (
+              <div className="flex items-center justify-between gap-2 rounded-lg border border-slate-600 bg-surface-muted px-3 py-2">
+                <span className="truncate text-sm text-slate-300" title={nfcPodId}>Tag: {nfcPodId}</span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => { setNfcPodId(null); setNfcError(null); }}
+                >
+                  Clear
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="w-full"
+                  onClick={handleScanTag}
+                  disabled={nfcScanning}
+                >
+                  <Nfc className="mr-2 h-4 w-4" />
+                  {nfcScanning ? 'Hold device near tag...' : 'Scan tag'}
+                </Button>
+                {nfcError && <p className="mt-1 text-sm text-red-400">{nfcError}</p>}
+              </>
+            )}
+          </div>
+        )}
 
         <Button
           className="w-full"

@@ -9,7 +9,7 @@ interface TowerContextValue {
   setPods: React.Dispatch<React.SetStateAction<PodRecord[]>>
   addTower: (slotCount: number) => Promise<TowerRecord>
   deleteTower: (towerId: string) => Promise<void>
-  addPod: (pod: Omit<PodRecord, 'id' | 'updatedAt'>) => Promise<PodRecord>
+  addPod: (pod: Omit<PodRecord, 'id' | 'updatedAt'> & { id?: string }) => Promise<PodRecord>
   updatePod: (id: string, updates: Partial<PodRecord>) => Promise<void>
   updatePodStage: (id: string, stage: GrowthStage) => Promise<void>
   deletePod: (id: string) => Promise<void>
@@ -54,8 +54,8 @@ export function TowerProvider({ children }: { children: React.ReactNode }) {
     await refresh()
   }, [refresh])
 
-  const addPod = useCallback(async (pod: Omit<PodRecord, 'id' | 'updatedAt'>) => {
-    const id = crypto.randomUUID()
+  const addPod = useCallback(async (pod: Omit<PodRecord, 'id' | 'updatedAt'> & { id?: string }) => {
+    const id = pod.id ?? crypto.randomUUID()
     const now = Date.now()
     const record: PodRecord = { ...pod, id, updatedAt: now }
     await db.pods.add(record)
