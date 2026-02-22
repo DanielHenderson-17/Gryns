@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Camera } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { PhotoPickerModal } from '@/components/ui/PhotoPickerModal'
 import { Select } from '@/components/ui/Select'
 import { PlantSelect } from '@/components/ui/PlantSelect'
 import { PLANT_LIBRARY } from '@/data/plants'
@@ -21,8 +22,8 @@ export function AddPodToTower() {
   const [slotNumber, setSlotNumber] = useState(1)
   const [plantedAt, setPlantedAt] = useState(Date.now())
   const [photoDataUrl, setPhotoDataUrl] = useState<string | null>(null)
+  const [photoModalOpen, setPhotoModalOpen] = useState(false)
   const [saving, setSaving] = useState(false)
-  const photoInputRef = useRef<HTMLInputElement>(null)
 
   if (!tower) {
     return (
@@ -84,15 +85,6 @@ export function AddPodToTower() {
     }
   }
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => setPhotoDataUrl(reader.result as string)
-    reader.readAsDataURL(file)
-    e.target.value = ''
-  }
-
   return (
     <div className="min-h-screen pb-8">
       <header className="sticky top-0 z-10 flex items-center gap-2 border-b border-slate-700 bg-slate-900/95 px-4 py-3 backdrop-blur">
@@ -138,14 +130,6 @@ export function AddPodToTower() {
 
         <div>
           <label className="mb-1 block text-sm font-medium text-slate-400">Photo (optional)</label>
-          <input
-            ref={photoInputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            className="hidden"
-            onChange={handlePhotoChange}
-          />
           {photoDataUrl ? (
             <div className="relative inline-block">
               <img
@@ -158,21 +142,28 @@ export function AddPodToTower() {
                 variant="ghost"
                 size="sm"
                 className="absolute bottom-0 right-0"
-                onClick={() => setPhotoDataUrl(null)}
+                onClick={() => setPhotoModalOpen(true)}
               >
-                Remove
+                Change
               </Button>
             </div>
           ) : (
             <button
               type="button"
-              onClick={() => photoInputRef.current?.click()}
-              className="flex items-center gap-2 rounded-lg border border-dashed border-slate-600 bg-surface-muted px-4 py-3 text-slate-400 transition-colors hover:border-accent hover:text-accent"
+              onClick={() => setPhotoModalOpen(true)}
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-slate-600 bg-surface-muted px-4 py-3 text-slate-400 transition-colors hover:border-accent hover:text-accent"
             >
               <Camera className="h-5 w-5" />
               Add photo
             </button>
           )}
+          <PhotoPickerModal
+            open={photoModalOpen}
+            onClose={() => setPhotoModalOpen(false)}
+            value={photoDataUrl}
+            onChange={setPhotoDataUrl}
+            title="Pod photo"
+          />
         </div>
 
         <Button

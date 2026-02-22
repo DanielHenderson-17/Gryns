@@ -7,6 +7,8 @@ import { Dashboard } from '@/components/features/Dashboard'
 import { TowerView } from '@/components/features/TowerView'
 import { AddPodToTower } from '@/components/features/AddPodToTower'
 import { PodDetail } from '@/components/features/PodDetail'
+import { PlantLibrary } from '@/components/features/PlantLibrary'
+import { PlantDetail } from '@/components/features/PlantDetail'
 import { OnboardingFlow } from '@/components/features/onboarding/OnboardingFlow'
 
 const SPLASH_DURATION_MS = 5000
@@ -71,7 +73,30 @@ function AppRoutes() {
           </AppLayout>
         }
       />
-      <Route path="/pod/:podId" element={<PodRoute />} />
+      <Route
+        path="/pod/:podId"
+        element={
+          <AppLayout>
+            <PodRoute />
+          </AppLayout>
+        }
+      />
+      <Route
+        path="/plants"
+        element={
+          <AppLayout>
+            <PlantLibrary />
+          </AppLayout>
+        }
+      />
+      <Route
+        path="/plant/:plantId"
+        element={
+          <AppLayout>
+            <PlantDetail />
+          </AppLayout>
+        }
+      />
       <Route path="*" element={<Navigate to={initialRoute} replace />} />
     </Routes>
   )

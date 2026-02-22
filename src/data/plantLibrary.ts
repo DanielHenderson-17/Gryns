@@ -7,16 +7,24 @@ import masterData from '../../plantLibraryMaster.json'
 import { capitalizeWords } from '@/utils/capitalize'
 import { sortAlphabetically } from '@/utils/sortAlphabetically'
 
+export interface GrowthStageEntry {
+  stage: string
+  duration?: { min?: number; max?: number; unit?: string }
+  description?: string
+  rate?: number
+}
+
 export interface MasterPlantEntry {
   name: string
   species: string | null
   description: string | null
   img: string | null
-  /** Filename in public/plants/ for dropdown/list icons, e.g. "bellpepper.webp" */
   icon_img: string | null
   harvest: { duration?: { max?: number; min?: number; unit?: string } } | null
   yield: { unit?: string; value?: number; label?: string } | null
-  germination: { duration?: { max?: number; min?: number; unit?: string }; rate?: number } | null
+  /** Deprecated: use growth_stages. Kept for backward compat; derived from growth_stages if missing. */
+  germination?: { duration?: { max?: number; min?: number; unit?: string }; rate?: number } | null
+  growth_stages?: (GrowthStageEntry | null)[]
   hardinessZone: { max?: number; min?: number } | null
 }
 
@@ -29,7 +37,8 @@ export interface PlantOption {
   icon_img: string | null
   harvest: MasterPlantEntry['harvest']
   yield: MasterPlantEntry['yield']
-  germination: MasterPlantEntry['germination']
+  germination: { duration?: { min?: number; max?: number; unit?: string }; rate?: number } | null
+  growth_stages: (GrowthStageEntry | null)[]
   hardinessZone: MasterPlantEntry['hardinessZone']
 }
 
@@ -42,19 +51,30 @@ function slug(name: string): string {
 
 const raw = (masterData as { _schema?: string[]; plants: MasterPlantEntry[] }).plants || []
 
+function getGerminationFromEntry(entry: GrowthStageEntry | null | undefined): PlantOption['germination'] {
+  if (!entry?.duration) return null
+  return { duration: entry.duration, rate: entry.rate }
+}
+
 export const PLANT_LIBRARY: PlantOption[] = sortAlphabetically(
-  raw.map((p) => ({
-    id: slug(p.name),
-    name: capitalizeWords(p.name),
-    species: p.species ?? '',
-    description: p.description ?? null,
-    img: p.img ?? null,
-    icon_img: p.icon_img ?? null,
-    harvest: p.harvest ?? null,
-    yield: p.yield ?? null,
-    germination: p.germination ?? null,
-    hardinessZone: p.hardinessZone ?? null,
-  })),
+  raw.map((p) => {
+    const growthStages = p.growth_stages ?? []
+    const germinationEntry = growthStages.find((s): s is GrowthStageEntry => s?.stage === 'germination')
+    const germination = getGerminationFromEntry(germinationEntry) ?? p.germination ?? null
+    return {
+      id: slug(p.name),
+      name: capitalizeWords(p.name),
+      species: p.species ?? '',
+      description: p.description ?? null,
+      img: p.img ?? null,
+      icon_img: p.icon_img ?? null,
+      harvest: p.harvest ?? null,
+      yield: p.yield ?? null,
+      germination,
+      growth_stages: p.growth_stages ?? [],
+      hardinessZone: p.hardinessZone ?? null,
+    }
+  }),
   (p) => p.name
 )
 

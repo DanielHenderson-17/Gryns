@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Camera, ImagePlus, Leaf, Trash2 } from 'lucide-react'
+import { ArrowLeft, Camera, Leaf, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { PhotoPickerModal } from '@/components/ui/PhotoPickerModal'
 import { PLANT_LIBRARY, getPlantIconUrl } from '@/data/plants'
 import { useTowerContext } from '@/context/TowerContext'
 import type { PodRecord, GrowthStage } from '@/db'
@@ -14,8 +15,8 @@ const STAGE_ORDER: GrowthStage[] = ['germination', 'sprouted', 'growing', 'harve
 
 const STAGE_BUTTON_LABELS: Record<GrowthStage, string> = {
   germination: "It sprouted!",
-  sprouted: "It's growing!",
-  growing: "Harvest ready!",
+  sprouted: "It has green leaves!",
+  growing: "It's flowering!",
   harvest_ready: "Harvested",
   harvested: "Harvested",
 }
@@ -23,6 +24,15 @@ const STAGE_BUTTON_LABELS: Record<GrowthStage, string> = {
 function nextStage(current: GrowthStage): GrowthStage | null {
   const i = STAGE_ORDER.indexOf(current)
   return i < STAGE_ORDER.length - 1 ? STAGE_ORDER[i + 1] : null
+}
+
+/** Map pod growth stage to plant library growth_stages key for duration lookup */
+const POD_STAGE_TO_PLANT_STAGE: Record<GrowthStage, string | null> = {
+  germination: 'germination',
+  sprouted: 'seedling',
+  growing: 'vegetative',
+  harvest_ready: 'flowering', // show flowering duration; some plants have fruiting instead
+  harvested: null,
 }
 
 function formatDuration(duration?: { min?: number; max?: number; unit?: string }): string {
@@ -34,6 +44,25 @@ function formatDuration(duration?: { min?: number; max?: number; unit?: string }
   if (min == null && max == null) return '—'
   if (min === max) return `${min} ${unit}`
   return `${min}-${max} ${unit}`
+}
+
+function getDurationForPodStage(
+  plant: { growth_stages?: { stage: string; duration?: { min?: number; max?: number; unit?: string } }[] | null; germination?: { duration?: { min?: number; max?: number; unit?: string } } | null } | undefined,
+  podStage: GrowthStage
+): string {
+  if (!plant) return '—'
+  const stageKey = POD_STAGE_TO_PLANT_STAGE[podStage]
+  if (!stageKey) return '' // harvested: no duration, no dash
+  if (podStage === 'germination' && plant.germination?.duration)
+    return formatDuration(plant.germination.duration)
+  const entry = plant.growth_stages?.find((s) => s?.stage === stageKey)
+  if (entry?.duration) return formatDuration(entry.duration)
+  // harvest_ready: try fruiting if no flowering
+  if (podStage === 'harvest_ready') {
+    const fruiting = plant.growth_stages?.find((s) => s?.stage === 'fruiting')
+    if (fruiting?.duration) return formatDuration(fruiting.duration)
+  }
+  return '—'
 }
 
 interface PodDetailProps {
@@ -50,8 +79,6 @@ export function PodDetail({ pod }: PodDetailProps) {
   const [saving, setSaving] = useState(false)
   const [photoModalOpen, setPhotoModalOpen] = useState(false)
   const editAreaRef = useRef<HTMLDivElement>(null)
-  const uploadInputRef = useRef<HTMLInputElement>(null)
-  const takePhotoInputRef = useRef<HTMLInputElement>(null)
 
   const plant = PLANT_LIBRARY.find((p) => p.id === pod.plantId)
   const plantIconUrl = plant ? getPlantIconUrl(plant) : null
@@ -101,24 +128,6 @@ export function PodDetail({ pod }: PodDetailProps) {
   const cancelEdit = () => {
     setEditing(null)
     setEditValue('')
-  }
-
-  const handlePhotoFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => {
-      const dataUrl = reader.result as string
-      updatePod(pod.id, { photoDataUrl: dataUrl })
-    }
-    reader.readAsDataURL(file)
-    e.target.value = ''
-    setPhotoModalOpen(false)
-  }
-
-  const handleRemovePhoto = () => {
-    updatePod(pod.id, { photoDataUrl: null })
-    setPhotoModalOpen(false)
   }
 
   const plantedDateStr = new Date(pod.plantedAt).toISOString().slice(0, 10)
@@ -176,70 +185,13 @@ export function PodDetail({ pod }: PodDetailProps) {
           </div>
         </div>
 
-        {photoModalOpen && (
-          <div
-            className="fixed inset-0 z-30 flex items-end justify-center bg-black/60 p-4 sm:items-center"
-            onClick={() => setPhotoModalOpen(false)}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="photo-modal-title"
-          >
-            <div
-              className="w-full max-w-sm rounded-2xl border border-slate-600 bg-slate-800 p-4 shadow-xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h2 id="photo-modal-title" className="mb-3 text-lg font-medium text-slate-100">
-                Pod photo
-              </h2>
-              <input
-                ref={uploadInputRef}
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handlePhotoFile}
-              />
-              <input
-                ref={takePhotoInputRef}
-                type="file"
-                accept="image/*"
-                capture="environment"
-                className="hidden"
-                onChange={handlePhotoFile}
-              />
-              <div className="flex flex-col gap-2">
-                <Button
-                  variant="secondary"
-                  className="w-full justify-center gap-2"
-                  onClick={() => uploadInputRef.current?.click()}
-                >
-                  <ImagePlus className="h-4 w-4" />
-                  Upload photo
-                </Button>
-                <Button
-                  variant="secondary"
-                  className="w-full justify-center gap-2"
-                  onClick={() => takePhotoInputRef.current?.click()}
-                >
-                  <Camera className="h-4 w-4" />
-                  Take photo
-                </Button>
-                {pod.photoDataUrl && (
-                  <Button
-                    variant="secondary"
-                    className="w-full justify-center gap-2 text-red-400 hover:bg-red-500/10 hover:text-red-300"
-                    onClick={handleRemovePhoto}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                    Remove photo
-                  </Button>
-                )}
-                <Button variant="secondary" className="w-full" onClick={() => setPhotoModalOpen(false)}>
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        <PhotoPickerModal
+          open={photoModalOpen}
+          onClose={() => setPhotoModalOpen(false)}
+          value={pod.photoDataUrl}
+          onChange={(url) => updatePod(pod.id, { photoDataUrl: url })}
+          title="Pod photo"
+        />
 
         <div className="mb-6 text-center">
           <h1 className="text-2xl font-semibold text-slate-100">
@@ -341,17 +293,15 @@ export function PodDetail({ pod }: PodDetailProps) {
           <div className="rounded-xl border border-slate-700 bg-surface p-3">
             <p className="mb-0.5 text-xs uppercase tracking-wider text-slate-500">Growth stage</p>
             <div className="flex items-center justify-between gap-2">
-              <p className="text-slate-100 capitalize">{pod.growthStage.replace('_', ' ')}</p>
+              <p className="text-slate-100 capitalize">{pod.growthStage.replace(/_/g, ' ')}</p>
               <p className="text-sm text-slate-400 shrink-0">
-                {pod.growthStage === 'germination' && plant?.germination?.duration
-                  ? formatDuration(plant.germination.duration)
-                  : '—'}
+                {getDurationForPodStage(plant, pod.growthStage)}
               </p>
             </div>
-            {advanceLabel && (
+            {advanceLabel && next && (
               <Button
                 className="mt-2 w-full"
-                onClick={() => next && updatePodStage(pod.id, next)}
+                onClick={() => updatePodStage(pod.id, next)}
               >
                 {advanceLabel}
               </Button>

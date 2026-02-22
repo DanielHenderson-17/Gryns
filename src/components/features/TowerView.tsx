@@ -39,13 +39,18 @@ export function TowerView({ tower, pods }: TowerViewProps) {
             const plant = PLANT_LIBRARY.find((p) => p.id === pod.plantId)
             const iconUrl = plant ? getPlantIconUrl(plant) : null
             const displayUrl = pod.photoDataUrl ?? iconUrl
+            const stageName = stageLabel(pod.growthStage)
+            const durationStr = stageDurationLabel(pod.growthStage, plant)
             return (
             <li key={pod.id}>
               <Link
                 to={`/pod/${pod.id}`}
-                className="flex items-center gap-4 rounded-xl border border-slate-700 bg-surface p-4 transition-colors hover:border-accent/50"
+                className="relative flex items-center gap-4 rounded-xl border border-slate-700 bg-surface px-4 py-2.5 transition-colors hover:border-accent/50"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-muted">
+                <span className="absolute top-2 right-3 rounded-md bg-slate-700 px-2 py-0.5 text-xs font-medium text-slate-300">
+                  Slot {pod.slotNumber}
+                </span>
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface-muted">
                   {displayUrl ? (
                     <>
                       <img
@@ -59,16 +64,22 @@ export function TowerView({ tower, pods }: TowerViewProps) {
                         }}
                       />
                       <span className="hidden h-full w-full items-center justify-center bg-surface-muted [&.flex]:flex" aria-hidden>
-                        <Leaf className="h-6 w-6 text-slate-500" />
+                        <Leaf className="h-8 w-8 text-slate-500" />
                       </span>
                     </>
                   ) : (
-                    <Leaf className="h-6 w-6 text-slate-500" />
+                    <Leaf className="h-8 w-8 text-slate-500" />
                   )}
                 </div>
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 pr-16">
                   <p className="font-medium text-slate-100">{capitalizeWords(pod.plantName)}</p>
-                  <p className="text-sm text-slate-500">Slot {pod.slotNumber} · {stageLabel(pod.growthStage)}</p>
+                  {plant?.species && (
+                    <p className="text-sm text-slate-500 italic">{plant.species}</p>
+                  )}
+                  <p className="mt-0.5 text-sm text-slate-400">
+                    {stageName}
+                    <span className="ml-1">{durationStr}</span>
+                  </p>
                 </div>
               </Link>
             </li>
@@ -89,4 +100,25 @@ function stageLabel(s: PodRecord['growthStage']): string {
     harvested: 'Harvested',
   }
   return labels[s] ?? s
+}
+
+function formatDuration(duration?: { min?: number; max?: number; unit?: string }): string {
+  if (duration?.min == null && duration?.max == null) return '—'
+  const min = duration?.min ?? duration?.max
+  const max = duration?.max ?? duration?.min
+  const u = duration?.unit ?? ''
+  const unit = u === 'week' ? 'weeks' : u === 'day' ? 'days' : u
+  if (min == null && max == null) return '—'
+  if (min === max) return `${min} ${unit}`
+  return `${min}-${max} ${unit}`
+}
+
+function stageDurationLabel(
+  growthStage: PodRecord['growthStage'],
+  plant: { germination: { duration?: { min?: number; max?: number; unit?: string } } | null } | undefined
+): string {
+  if (growthStage === 'germination' && plant?.germination?.duration) {
+    return formatDuration(plant.germination.duration)
+  }
+  return '—'
 }

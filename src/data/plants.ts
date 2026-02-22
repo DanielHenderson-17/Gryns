@@ -3,4 +3,10 @@
  * Edit plantLibraryMaster.json (project root) and rebuild to grow the list.
  */
 
-export { PLANT_LIBRARY, getPlantImageUrl, getPlantIconUrl, type PlantOption } from './plantLibrary'
+export {
+  PLANT_LIBRARY,
+  getPlantImageUrl,
+  getPlantIconUrl,
+  type PlantOption,
+  type GrowthStageEntry,
+} from './plantLibrary'
