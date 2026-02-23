@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Camera, Leaf, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { PhotoPickerModal } from '@/components/ui/PhotoPickerModal'
-import { PLANT_LIBRARY, getPlantIconUrl } from '@/data/plants'
+import { PLANT_LIBRARY, getPlantIconUrl, type PlantOption } from '@/data/plants'
+import { resolvePlantAssetUrl } from '@/utils/assetUrl'
 import { useTowerContext } from '@/context/TowerContext'
 import type { PodRecord, GrowthStage } from '@/db'
 import { capitalizeWords } from '@/utils/capitalize'
@@ -46,10 +47,7 @@ function formatDuration(duration?: { min?: number; max?: number; unit?: string }
   return `${min}-${max} ${unit}`
 }
 
-function getDurationForPodStage(
-  plant: { growth_stages?: { stage: string; duration?: { min?: number; max?: number; unit?: string } }[] | null; germination?: { duration?: { min?: number; max?: number; unit?: string } } | null } | undefined,
-  podStage: GrowthStage
-): string {
+function getDurationForPodStage(plant: PlantOption | undefined, podStage: GrowthStage): string {
   if (!plant) return '—'
   const stageKey = POD_STAGE_TO_PLANT_STAGE[podStage]
   if (!stageKey) return '' // harvested: no duration, no dash
@@ -81,7 +79,7 @@ export function PodDetail({ pod }: PodDetailProps) {
   const editAreaRef = useRef<HTMLDivElement>(null)
 
   const plant = PLANT_LIBRARY.find((p) => p.id === pod.plantId)
-  const plantIconUrl = plant ? getPlantIconUrl(plant) : null
+  const plantIconUrl = plant ? resolvePlantAssetUrl(getPlantIconUrl(plant)) : null
   const displayImageUrl = pod.photoDataUrl ?? plantIconUrl
 
   useEffect(() => {
